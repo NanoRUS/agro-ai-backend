@@ -1,0 +1,47 @@
+from pydantic_settings import BaseSettings
+from functools import lru_cache
+
+
+class Settings(BaseSettings):
+    database_url: str = "sqlite+aiosqlite:///./agro.db"
+    secret_key: str = "dev-secret-key"
+    debug: bool = True
+
+    # External CV service
+    plant_id_api_key: str = ""
+
+    # LLM for explanation layer
+    openai_api_key: str = ""
+
+    # Weather
+    weather_api_key: str = ""
+
+    # Video pipeline
+    video_pipeline_url: str = ""
+    video_pipeline_api_key: str = ""
+
+    # Billing
+    billing_service_url: str = ""
+    billing_service_api_key: str = ""
+
+    # S3
+    s3_endpoint: str = ""
+    s3_bucket: str = "agro-media"
+    s3_access_key: str = ""
+    s3_secret_key: str = ""
+
+    # CORS (production — comma-separated origins)
+    allowed_origins: str = "http://localhost:3000"
+
+    # Scoring
+    top_issues_count: int = 3
+    min_score_threshold: float = 0.05
+
+    class Config:
+        env_file = ".env"
+        case_sensitive = False
+
+
+@lru_cache
+def get_settings() -> Settings:
+    return Settings()

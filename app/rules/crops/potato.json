@@ -1,0 +1,37 @@
+{
+  "crop": "potato",
+  "name_ru": "Картофель",
+  "applicable_issues": [
+    "overwatering", "underwatering",
+    "nitrogen_deficiency", "potassium_deficiency", "magnesium_deficiency",
+    "cold_stress",
+    "phytophthora", "alternaria",
+    "aphids", "spider_mites", "slug_damage",
+    "general_stress"
+  ],
+  "issue_overrides": {
+    "phytophthora": {
+      "urgency_base": "critical",
+      "weight_multiplier": 1.35,
+      "note": "Картофель — основная культура-хозяин Phytophthora infestans"
+    },
+    "alternaria": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.18,
+      "note": "Ранняя сухая пятнистость — одна из самых распространённых болезней картофеля"
+    },
+    "potassium_deficiency": {
+      "weight_multiplier": 1.15,
+      "note": "Калий критичен для формирования клубней"
+    }
+  },
+  "stage_modifiers": {
+    "fruiting": {
+      "phytophthora": 1.25,
+      "potassium_deficiency": 1.20
+    },
+    "growing": {
+      "nitrogen_deficiency": 1.10
+    }
+  }
+}

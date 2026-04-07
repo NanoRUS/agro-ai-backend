@@ -1,0 +1,41 @@
+{
+  "crop": "pepper",
+  "name_ru": "Перец",
+  "applicable_issues": [
+    "overwatering", "underwatering", "root_rot",
+    "nitrogen_deficiency", "potassium_deficiency", "magnesium_deficiency",
+    "cold_stress", "transplant_stress", "sunburn",
+    "powdery_mildew", "alternaria",
+    "aphids", "spider_mites",
+    "blossom_end_rot"
+  ],
+  "issue_overrides": {
+    "blossom_end_rot": {
+      "weight_multiplier": 1.20,
+      "note": "Вершинная гниль перца — частая проблема при неравномерном поливе"
+    },
+    "cold_stress": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.25,
+      "note": "Перец очень чувствителен к холоду"
+    },
+    "sunburn": {
+      "weight_multiplier": 1.18,
+      "note": "Перец при акклиматизации часто получает ожоги"
+    }
+  },
+  "stage_modifiers": {
+    "fruiting": {
+      "blossom_end_rot": 1.35,
+      "potassium_deficiency": 1.20
+    },
+    "seedling": {
+      "transplant_stress": 1.35,
+      "cold_stress": 1.40,
+      "sunburn": 1.20
+    },
+    "flowering": {
+      "cold_stress": 1.20
+    }
+  }
+}

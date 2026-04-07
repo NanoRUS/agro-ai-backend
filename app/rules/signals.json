@@ -1,0 +1,154 @@
+{
+  "signals": {
+    "wet_soil": {
+      "description": "Почва влажная или переувлажнённая",
+      "source": "questionnaire",
+      "category": "moisture"
+    },
+    "dry_soil": {
+      "description": "Почва сухая",
+      "source": "questionnaire",
+      "category": "moisture"
+    },
+    "yellow_leaves_lower": {
+      "description": "Пожелтение нижних листьев",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "yellow_leaves_uniform": {
+      "description": "Равномерное пожелтение всего растения",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "leaf_edge_burn": {
+      "description": "Подгорание/некроз краёв листьев",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "white_powder": {
+      "description": "Белый порошкообразный налёт на листьях",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "dark_spots": {
+      "description": "Тёмные пятна на листьях или стебле",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "dry_spots": {
+      "description": "Сухие светлые пятна",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "curled_leaves": {
+      "description": "Скрученность листьев",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "holes_in_leaves": {
+      "description": "Дырки или объеденные края листьев",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "webbing": {
+      "description": "Тонкая паутинка на листьях",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "insects_visible": {
+      "description": "Видимые насекомые на растении",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "stem_darkening": {
+      "description": "Потемнение или загнивание стебля",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "fruit_rot": {
+      "description": "Гниение плодов",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "blossom_end_rot": {
+      "description": "Вершинная гниль (почернение кончика плода)",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "wilting": {
+      "description": "Увядание листьев или всего растения",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "slow_growth": {
+      "description": "Замедленный рост, мелкие листья",
+      "source": "questionnaire",
+      "category": "symptom"
+    },
+    "high_humidity": {
+      "description": "Высокая влажность воздуха (>70%)",
+      "source": "context",
+      "category": "environment"
+    },
+    "recent_rain": {
+      "description": "Недавние дожди",
+      "source": "questionnaire",
+      "category": "environment"
+    },
+    "cold_nights": {
+      "description": "Холодные ночи (ниже +8°C)",
+      "source": "questionnaire",
+      "category": "environment"
+    },
+    "heat_stress": {
+      "description": "Жара (выше +35°C днём)",
+      "source": "questionnaire",
+      "category": "environment"
+    },
+    "greenhouse": {
+      "description": "Выращивание в теплице",
+      "source": "questionnaire",
+      "category": "environment"
+    },
+    "open_field": {
+      "description": "Выращивание в открытом грунте",
+      "source": "questionnaire",
+      "category": "environment"
+    },
+    "recently_transplanted": {
+      "description": "Недавняя пересадка (менее 2 недель)",
+      "source": "questionnaire",
+      "category": "event"
+    },
+    "recently_fertilized": {
+      "description": "Недавнее внесение удобрений",
+      "source": "questionnaire",
+      "category": "event"
+    },
+    "cv_fungal_confidence": {
+      "description": "Уверенность CV в грибковом заболевании",
+      "source": "cv",
+      "category": "cv"
+    },
+    "cv_pest_confidence": {
+      "description": "Уверенность CV в наличии вредителей",
+      "source": "cv",
+      "category": "cv"
+    },
+    "cv_nutrient_deficiency_confidence": {
+      "description": "Уверенность CV в дефиците питания",
+      "source": "cv",
+      "category": "cv"
+    },
+    "cv_bacterial_confidence": {
+      "description": "Уверенность CV в бактериальном поражении",
+      "source": "cv",
+      "category": "cv"
+    },
+    "cv_healthy_confidence": {
+      "description": "Уверенность CV что растение здорово",
+      "source": "cv",
+      "category": "cv"
+    }
+  }
+}

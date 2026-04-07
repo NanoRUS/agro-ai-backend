@@ -1,0 +1,761 @@
+{
+  "_comment": "Веса core-сигналов калиброваны так, чтобы max_possible (сумма core-сигналов) ≈ 1.0–1.4. При нормализации score = raw_core / max_core * multipliers. CV-сигналы добавляют бонус ≤ 0.20. environment_modifiers и weather_modifiers — мультипликаторы (1.x = усиление, 0.x = ослабление).",
+  "issues": [
+    {
+      "id": "overwatering",
+      "title": "Перелив",
+      "category": "watering",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "wet_soil": 0.45,
+        "yellow_leaves_lower": 0.25,
+        "wilting": 0.22,
+        "stem_darkening": 0.18,
+        "slow_growth": 0.10,
+        "greenhouse": 0.05
+      },
+      "negative_signals": {
+        "dry_soil": -0.40,
+        "heat_stress": -0.08,
+        "recently_transplanted": -0.05
+      },
+      "environment_modifiers": {
+        "greenhouse": 1.10
+      },
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "wet_soil": "Почва переувлажнена",
+        "yellow_leaves_lower": "Пожелтение нижних листьев — признак кислородного голодания корней при переливе",
+        "wilting": "Увядание при влажной почве — корни не дышат и не подают воду",
+        "stem_darkening": "Потемнение стебля у основания указывает на начало гниения"
+      },
+      "today_actions": [
+        "Прекратите полив на 5–7 дней",
+        "Проверьте дренаж: застой воды недопустим",
+        "Рыхлите верхний слой почвы для аэрации",
+        "Уберите мульчу временно, если она удерживает лишнюю влагу"
+      ],
+      "what_to_check_next": [
+        "Осмотрите корни: здоровые — белые, поражённые — тёмные с запахом",
+        "Через 3–5 дней проверьте, улучшилось ли состояние листьев",
+        "Поливайте только когда верхние 3–5 см почвы подсохли"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "underwatering",
+      "title": "Недолив",
+      "category": "watering",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "dry_soil": 0.50,
+        "curled_leaves": 0.30,
+        "wilting": 0.25,
+        "leaf_edge_burn": 0.18,
+        "heat_stress": 0.12,
+        "slow_growth": 0.10
+      },
+      "negative_signals": {
+        "wet_soil": -0.45
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {
+        "heat_stress": 1.15
+      },
+      "explanation_factors": {
+        "dry_soil": "Почва пересохла",
+        "curled_leaves": "Листья скручиваются, снижая испарение при дефиците воды",
+        "wilting": "Растение увядает из-за недостатка влаги",
+        "leaf_edge_burn": "Края листьев засыхают первыми при дефиците воды"
+      },
+      "today_actions": [
+        "Полейте обильно до полного промачивания корневого кома",
+        "После полива замульчируйте для сохранения влаги",
+        "В жару поливайте утром или вечером, не в полдень",
+        "Норма полива: большинство овощей требуют 1–2 см воды в неделю"
+      ],
+      "what_to_check_next": [
+        "Через 2–4 часа листья должны восстановить тургор",
+        "Установите регулярный режим полива",
+        "При регулярных проблемах рассмотрите капельный полив"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "root_rot",
+      "title": "Корневая гниль",
+      "category": "disease",
+      "urgency_base": "high",
+      "required_any": ["stem_darkening", "wilting"],
+      "required_all": [],
+      "positive_signals": {
+        "stem_darkening": 0.50,
+        "wet_soil": 0.28,
+        "wilting": 0.22,
+        "yellow_leaves_lower": 0.15,
+        "slow_growth": 0.10,
+        "cv_fungal_confidence": 0.18
+      },
+      "negative_signals": {
+        "dry_soil": -0.30
+      },
+      "environment_modifiers": {
+        "greenhouse": 1.12
+      },
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "stem_darkening": "Почернение стебля у основания — прямой признак гнили",
+        "wet_soil": "Постоянная влажность создаёт условия для патогенов",
+        "wilting": "Корни разрушены и не могут транспортировать воду"
+      },
+      "today_actions": [
+        "Немедленно прекратите полив",
+        "Извлеките растение и осмотрите корни",
+        "Удалите тёмные мягкие корни стерильным ножом",
+        "Обработайте корни Фитоспорином, Превикуром или марганцовкой",
+        "Пересадите в свежий грунт с хорошим дренажем, не поливайте 5–7 дней"
+      ],
+      "what_to_check_next": [
+        "Через неделю оцените приживаемость — новые листья добрый знак",
+        "Проверьте дренаж: вода не должна застаиваться",
+        "При массовом поражении грядки обработайте биофунгицидом"
+      ],
+      "video_tone": "urgent_expert"
+    },
+    {
+      "id": "nitrogen_deficiency",
+      "title": "Дефицит азота",
+      "category": "nutrition",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "yellow_leaves_lower": 0.42,
+        "slow_growth": 0.35,
+        "yellow_leaves_uniform": 0.22,
+        "cv_nutrient_deficiency_confidence": 0.22
+      },
+      "negative_signals": {
+        "dark_spots": -0.18,
+        "white_powder": -0.22,
+        "recently_fertilized": -0.28,
+        "insects_visible": -0.12,
+        "webbing": -0.15
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "yellow_leaves_lower": "Азот переходит из старых листьев в новые — нижние желтеют первыми",
+        "slow_growth": "Без азота растение не может строить новые клетки",
+        "yellow_leaves_uniform": "При сильном дефиците желтеет всё растение равномерно"
+      },
+      "today_actions": [
+        "Внесите азотосодержащее удобрение (мочевина, аммиачная селитра) по инструкции",
+        "Быстрый эффект: внекорневая подкормка 0.5% раствором мочевины",
+        "Органика: настой куриного помёта 1:20 или коровяка 1:10",
+        "Не переусердствуйте — передозировка тоже вредна"
+      ],
+      "what_to_check_next": [
+        "Через 7–10 дней новые листья должны появляться зелёными",
+        "Нижние пожелтевшие листья не восстановятся — следите за новым ростом",
+        "Проверьте pH: при pH > 7.5 азот плохо усваивается"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "potassium_deficiency",
+      "title": "Дефицит калия",
+      "category": "nutrition",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "leaf_edge_burn": 0.58,
+        "slow_growth": 0.18,
+        "yellow_leaves_lower": 0.12,
+        "fruit_rot": 0.12,
+        "cv_nutrient_deficiency_confidence": 0.22
+      },
+      "negative_signals": {
+        "white_powder": -0.28,
+        "insects_visible": -0.12,
+        "recently_fertilized": -0.22,
+        "wet_soil": -0.05
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "leaf_edge_burn": "Классический симптом: подгорание краёв листьев начиная со старых",
+        "fruit_rot": "Калий критичен для формирования и созревания плодов"
+      },
+      "today_actions": [
+        "Внесите сульфат калия или монофосфат калия по инструкции",
+        "Избегайте хлористый калий для томатов и перца — они чувствительны к хлору",
+        "Древесная зола — натуральный источник калия (1 стакан на кв. м с поливом)"
+      ],
+      "what_to_check_next": [
+        "Через 10–14 дней проверьте состояние новых листьев",
+        "Избыток кальция блокирует усвоение калия — проверьте баланс удобрений"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "magnesium_deficiency",
+      "title": "Дефицит магния",
+      "category": "nutrition",
+      "urgency_base": "low",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "yellow_leaves_uniform": 0.48,
+        "yellow_leaves_lower": 0.28,
+        "slow_growth": 0.15,
+        "cv_nutrient_deficiency_confidence": 0.20
+      },
+      "negative_signals": {
+        "leaf_edge_burn": -0.15,
+        "dark_spots": -0.18,
+        "recently_fertilized": -0.22,
+        "insects_visible": -0.10
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "yellow_leaves_uniform": "Межжилковый хлороз: жилки зелёные, пластина желтеет — характерно для нехватки магния",
+        "yellow_leaves_lower": "Магний подвижен — переходит из старых листьев в молодые"
+      },
+      "today_actions": [
+        "Полейте раствором сульфата магния (1 ст. ложка на 10 л воды)",
+        "Или внекорневая: 2% раствор сульфата магния по листу",
+        "При регулярном дефиците — комплексные удобрения с MgO"
+      ],
+      "what_to_check_next": [
+        "Через 5–7 дней после внекорневой подкормки оцените цвет новых листьев",
+        "При кислом грунте магний лучше усваивается — проверьте pH"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "cold_stress",
+      "title": "Холодовой стресс",
+      "category": "abiotic",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "cold_nights": 0.55,
+        "slow_growth": 0.25,
+        "wilting": 0.20,
+        "curled_leaves": 0.18,
+        "yellow_leaves_uniform": 0.12
+      },
+      "negative_signals": {
+        "heat_stress": -0.45,
+        "dry_soil": -0.05
+      },
+      "environment_modifiers": {
+        "open_field": 1.12
+      },
+      "weather_modifiers": {
+        "cold_nights": 1.18
+      },
+      "explanation_factors": {
+        "cold_nights": "Ночные температуры ниже +8°C повреждают теплолюбивые культуры",
+        "wilting": "Холод нарушает работу корневой системы",
+        "curled_leaves": "Листья скручиваются при температурном стрессе"
+      },
+      "today_actions": [
+        "Накройте растения агроволокном (спанбондом) на ночь",
+        "Замульчируйте почву для сохранения тепла корней",
+        "Не поливайте в холодную погоду — холодная вода усиливает стресс",
+        "Обработайте Эпином или Цирконом для повышения холодостойкости"
+      ],
+      "what_to_check_next": [
+        "При прогнозе заморозков организуйте укрытие заранее",
+        "Через 3–5 тёплых дней растение должно восстановиться"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "transplant_stress",
+      "title": "Стресс после пересадки",
+      "category": "abiotic",
+      "urgency_base": "low",
+      "required_any": ["recently_transplanted"],
+      "required_all": [],
+      "positive_signals": {
+        "recently_transplanted": 0.65,
+        "wilting": 0.25,
+        "slow_growth": 0.20,
+        "yellow_leaves_lower": 0.10
+      },
+      "negative_signals": {
+        "dark_spots": -0.18,
+        "white_powder": -0.22,
+        "insects_visible": -0.12,
+        "webbing": -0.20
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "recently_transplanted": "Недавняя пересадка нарушает корневую систему",
+        "wilting": "После пересадки корни не успевают обеспечивать листья водой"
+      },
+      "today_actions": [
+        "Притените на 3–5 дней после пересадки",
+        "Поливайте умеренно, не допуская ни пересыхания, ни переувлажнения",
+        "Не подкармливайте 2 недели после пересадки",
+        "Корневин или Гетероауксин стимулируют корнеобразование"
+      ],
+      "what_to_check_next": [
+        "Через 7–14 дней растение должно тронуться в рост",
+        "Если стресс не проходит через 2 недели — ищите другую причину"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "powdery_mildew",
+      "title": "Мучнистая роса",
+      "category": "fungal",
+      "urgency_base": "medium",
+      "required_any": ["white_powder"],
+      "required_all": [],
+      "positive_signals": {
+        "white_powder": 0.68,
+        "high_humidity": 0.18,
+        "greenhouse": 0.12,
+        "cv_fungal_confidence": 0.22
+      },
+      "negative_signals": {
+        "dark_spots": -0.18,
+        "cv_bacterial_confidence": -0.12
+      },
+      "environment_modifiers": {
+        "greenhouse": 1.20
+      },
+      "weather_modifiers": {
+        "high_humidity": 1.15
+      },
+      "explanation_factors": {
+        "white_powder": "Белый мучнистый налёт — стопроцентный признак мучнистой росы",
+        "high_humidity": "Грибок активируется при высокой влажности и плохой вентиляции",
+        "greenhouse": "В закрытой теплице без проветривания болезнь распространяется быстрее"
+      },
+      "today_actions": [
+        "Удалите сильно поражённые листья и уничтожьте (не в компост)",
+        "Обработайте: коллоидная сера, Топаз, Хорус или Квадрис по инструкции",
+        "Проветрите теплицу — нормализуйте влажность",
+        "Не поливайте по листу",
+        "Профилактика соседних: опрыскайте молочной сывороткой 1:9"
+      ],
+      "what_to_check_next": [
+        "Через 5–7 дней оцените распространение",
+        "При прогрессировании — повторите обработку через 7–10 дней",
+        "Проверьте густоту посадок — загущение усиливает влажность"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "phytophthora",
+      "title": "Фитофтороз",
+      "category": "fungal",
+      "urgency_base": "high",
+      "required_any": ["dark_spots"],
+      "required_all": [],
+      "positive_signals": {
+        "dark_spots": 0.42,
+        "high_humidity": 0.18,
+        "cold_nights": 0.18,
+        "recent_rain": 0.15,
+        "open_field": 0.10,
+        "fruit_rot": 0.14,
+        "stem_darkening": 0.12,
+        "cv_fungal_confidence": 0.25
+      },
+      "negative_signals": {
+        "dry_soil": -0.12,
+        "heat_stress": -0.10,
+        "greenhouse": -0.06,
+        "white_powder": -0.22
+      },
+      "environment_modifiers": {
+        "open_field": 1.15
+      },
+      "weather_modifiers": {
+        "cold_nights": 1.18,
+        "recent_rain": 1.20,
+        "high_humidity": 1.12
+      },
+      "explanation_factors": {
+        "dark_spots": "Тёмные коричневые пятна с размытым краем — классический признак фитофторы",
+        "high_humidity": "Возбудитель активен при влажности >80% и температуре 15–20°C",
+        "cold_nights": "Перепад температур ночь/день создаёт конденсат — идеальная среда для спор",
+        "recent_rain": "Споры распространяются с каплями дождя"
+      },
+      "today_actions": [
+        "Немедленно удалите все поражённые листья и уничтожьте их",
+        "Обработайте медьсодержащим: бордоская смесь, Хом, Ордан, Ревус",
+        "Не поливайте по листу — только под корень",
+        "Проветрите теплицу, снизьте влажность",
+        "Изолируйте поражённые растения от здоровых"
+      ],
+      "what_to_check_next": [
+        "Проверьте соседние кусты на первые пятна",
+        "Через 48 часов оцените распространение — фитофтора распространяется очень быстро",
+        "При прохладной дождливой погоде — профилактические обработки раз в 7–10 дней"
+      ],
+      "video_tone": "urgent_expert"
+    },
+    {
+      "id": "alternaria",
+      "title": "Альтернариоз (сухая пятнистость)",
+      "category": "fungal",
+      "urgency_base": "medium",
+      "required_any": ["dark_spots"],
+      "required_all": [],
+      "positive_signals": {
+        "dark_spots": 0.38,
+        "dry_spots": 0.28,
+        "heat_stress": 0.20,
+        "yellow_leaves_lower": 0.12,
+        "cv_fungal_confidence": 0.22
+      },
+      "negative_signals": {
+        "white_powder": -0.28,
+        "cold_nights": -0.10,
+        "cv_bacterial_confidence": -0.12
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {
+        "heat_stress": 1.15
+      },
+      "explanation_factors": {
+        "dark_spots": "Концентрические тёмные пятна с жёлтым ореолом — признак альтернариоза",
+        "heat_stress": "Гриб активен в жаркую влажную погоду (25–30°C)",
+        "dry_spots": "Пятна со временем высыхают и крошатся"
+      },
+      "today_actions": [
+        "Удалите поражённые листья",
+        "Обработайте: Браво, Полирам, Ревус Топ, Луна Экспириенс",
+        "Не допускайте загущения посадок",
+        "Избегайте попадания воды на листья при поливе"
+      ],
+      "what_to_check_next": [
+        "Через 7 дней проверьте появление новых пятен",
+        "При системных заражениях чередуйте фунгициды разных классов"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "aphids",
+      "title": "Тля",
+      "category": "pest",
+      "urgency_base": "medium",
+      "required_any": ["insects_visible"],
+      "required_all": [],
+      "positive_signals": {
+        "insects_visible": 0.58,
+        "curled_leaves": 0.25,
+        "slow_growth": 0.15,
+        "greenhouse": 0.10,
+        "cv_pest_confidence": 0.28
+      },
+      "negative_signals": {
+        "webbing": -0.22,
+        "holes_in_leaves": -0.12
+      },
+      "environment_modifiers": {
+        "greenhouse": 1.10
+      },
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "insects_visible": "Мелкие насекомые на молодых побегах и нижней стороне листьев",
+        "curled_leaves": "Тля вызывает скручивание листьев — поселяется на верхушках побегов"
+      },
+      "today_actions": [
+        "Смойте тлю сильной струёй воды (нижняя сторона листьев)",
+        "При сильном поражении: Актара, Конфидор, Биотлин по инструкции",
+        "Мыльный раствор: 50 г хозяйственного мыла на 10 л воды",
+        "Проверьте наличие муравьёв — они «пасут» тлю"
+      ],
+      "what_to_check_next": [
+        "Проверьте молодые побеги через 3–5 дней",
+        "Тля размножается быстро — действуйте незамедлительно",
+        "При муравьиных дорожках — обработайте от муравьёв"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "spider_mites",
+      "title": "Паутинный клещ",
+      "category": "pest",
+      "urgency_base": "high",
+      "required_any": ["webbing"],
+      "required_all": [],
+      "positive_signals": {
+        "webbing": 0.68,
+        "heat_stress": 0.20,
+        "curled_leaves": 0.15,
+        "dry_soil": 0.10,
+        "greenhouse": 0.10,
+        "cv_pest_confidence": 0.25
+      },
+      "negative_signals": {
+        "high_humidity": -0.20,
+        "recent_rain": -0.15,
+        "holes_in_leaves": -0.10
+      },
+      "environment_modifiers": {
+        "greenhouse": 1.12
+      },
+      "weather_modifiers": {
+        "heat_stress": 1.22
+      },
+      "explanation_factors": {
+        "webbing": "Тонкая паутинка — стопроцентный признак паутинного клеща",
+        "heat_stress": "Клещ размножается взрывообразно в жару и при низкой влажности",
+        "dry_soil": "Сухие условия — идеальная среда для клеща"
+      },
+      "today_actions": [
+        "Повысьте влажность: опрыскайте растение водой (клещ не переносит влагу)",
+        "Обработайте акарицидом: Фитоверм, Актеллик, Клещевит, Флумайт",
+        "Обязательно обработайте нижнюю сторону листьев — там живёт клещ",
+        "Повторите через 5–7 дней для уничтожения вышедших из яиц"
+      ],
+      "what_to_check_next": [
+        "Нужно минимум 2–3 обработки",
+        "Чередуйте акарициды — у клеща быстро вырабатывается резистентность",
+        "При регулярных заражениях рассмотрите хищного клеща Phytoseiulus"
+      ],
+      "video_tone": "urgent_expert"
+    },
+    {
+      "id": "slug_damage",
+      "title": "Слизни и листогрызущие вредители",
+      "category": "pest",
+      "urgency_base": "medium",
+      "required_any": ["holes_in_leaves"],
+      "required_all": [],
+      "positive_signals": {
+        "holes_in_leaves": 0.60,
+        "wet_soil": 0.18,
+        "recent_rain": 0.18,
+        "cv_pest_confidence": 0.22
+      },
+      "negative_signals": {
+        "webbing": -0.28,
+        "heat_stress": -0.10,
+        "dry_soil": -0.08
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {
+        "recent_rain": 1.15
+      },
+      "explanation_factors": {
+        "holes_in_leaves": "Дырки в листьях — характерный след слизней и гусениц",
+        "wet_soil": "Слизни активны при высокой влажности и после дождей",
+        "recent_rain": "Слизни выходят кормиться в сырую погоду"
+      },
+      "today_actions": [
+        "Проверьте растения ночью с фонариком — слизней собирают руками",
+        "Рассыпьте суперфосфат или золу вокруг растений",
+        "Используйте метальдегид (Гроза, Слизнеед) по инструкции",
+        "Для гусениц — Лепидоцид или Битоксибациллин (биологические)"
+      ],
+      "what_to_check_next": [
+        "Осматривайте нижнюю сторону листьев на кладки яиц",
+        "Проверьте почву под растениями на наличие слизней днём"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "greenhouse_humidity",
+      "title": "Переувлажнение теплицы / плохая вентиляция",
+      "category": "abiotic",
+      "urgency_base": "medium",
+      "required_any": ["greenhouse"],
+      "required_all": [],
+      "positive_signals": {
+        "greenhouse": 0.50,
+        "high_humidity": 0.42,
+        "white_powder": 0.14,
+        "dark_spots": 0.10
+      },
+      "negative_signals": {
+        "open_field": -0.60
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {
+        "high_humidity": 1.18
+      },
+      "explanation_factors": {
+        "greenhouse": "В теплице без вентиляции влажность поднимается до критических значений",
+        "high_humidity": "Влажность выше 80% — идеальная среда для грибковых болезней"
+      },
+      "today_actions": [
+        "Откройте форточки и двери для проветривания",
+        "Проредите посадки если слишком загущены",
+        "Удалите нижние листья для улучшения циркуляции воздуха",
+        "Проветривайте каждое утро после росы"
+      ],
+      "what_to_check_next": [
+        "Установите гигрометр: поддерживайте влажность 60–70%",
+        "Рассмотрите установку вентилятора"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "nitrogen_excess",
+      "title": "Переизбыток азота",
+      "category": "nutrition",
+      "urgency_base": "medium",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "recently_fertilized": 0.55,
+        "curled_leaves": 0.22,
+        "slow_growth": 0.12,
+        "dark_spots": 0.08
+      },
+      "negative_signals": {
+        "yellow_leaves_lower": -0.22,
+        "yellow_leaves_uniform": -0.18,
+        "dry_soil": -0.05
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "recently_fertilized": "Недавнее внесение азотных удобрений при уже достаточном содержании",
+        "curled_leaves": "Чрезмерный рост вегетативной массы в ущерб плодоношению"
+      },
+      "today_actions": [
+        "Прекратите внесение азотных удобрений",
+        "Обильно пролейте почву для вымывания излишков",
+        "Переключитесь на калийно-фосфорные удобрения"
+      ],
+      "what_to_check_next": [
+        "Через 2–3 недели растение должно нормализоваться",
+        "Не вносите удобрения «на глаз» — делайте анализ почвы"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "blossom_end_rot",
+      "title": "Вершинная гниль",
+      "category": "physiological",
+      "urgency_base": "medium",
+      "required_any": ["blossom_end_rot"],
+      "required_all": [],
+      "positive_signals": {
+        "blossom_end_rot": 0.78,
+        "dry_soil": 0.18,
+        "recently_fertilized": 0.08
+      },
+      "negative_signals": {
+        "cv_fungal_confidence": -0.10,
+        "insects_visible": -0.15
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "blossom_end_rot": "Почернение вершины плода — физиологическое нарушение усвоения кальция",
+        "dry_soil": "Неравномерный полив нарушает транспорт кальция в плоды",
+        "recently_fertilized": "Избыток азота и калия блокирует усвоение кальция"
+      },
+      "today_actions": [
+        "Нормализуйте режим полива — без резких пересыханий",
+        "Внекорневая подкормка кальциевой селитрой или хлористым кальцием",
+        "Удалите поражённые плоды — они не восстановятся",
+        "Замульчируйте почву для стабилизации влажности"
+      ],
+      "what_to_check_next": [
+        "Новые завязи должны быть здоровыми при нормализации режима",
+        "При регулярной проблеме — внесите доломитовую муку или гипс"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "sunburn",
+      "title": "Солнечный ожог",
+      "category": "abiotic",
+      "urgency_base": "low",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "dry_spots": 0.48,
+        "heat_stress": 0.30,
+        "recently_transplanted": 0.18,
+        "open_field": 0.10
+      },
+      "negative_signals": {
+        "dark_spots": -0.22,
+        "white_powder": -0.25,
+        "greenhouse": -0.12
+      },
+      "environment_modifiers": {
+        "open_field": 1.08
+      },
+      "weather_modifiers": {
+        "heat_stress": 1.20
+      },
+      "explanation_factors": {
+        "dry_spots": "Светлые сухие пятна — характерный признак солнечного ожога",
+        "heat_stress": "При жаре >35°C прямое солнце сжигает листья",
+        "recently_transplanted": "Рассада особенно уязвима: не адаптирована к открытому солнцу"
+      },
+      "today_actions": [
+        "Притените в пиковые часы (12:00–16:00) укрывным материалом",
+        "Полейте утром чтобы растение имело запас воды в жару",
+        "Не поливайте по листу в солнечную погоду"
+      ],
+      "what_to_check_next": [
+        "Обожжённые пятна не исчезнут, но новые листья должны быть здоровыми",
+        "Проверьте нет ли дополнительного теплового стресса"
+      ],
+      "video_tone": "calm_practical"
+    },
+    {
+      "id": "general_stress",
+      "title": "Общий стресс / нарушение условий ухода",
+      "category": "abiotic",
+      "urgency_base": "low",
+      "required_any": [],
+      "required_all": [],
+      "positive_signals": {
+        "slow_growth": 0.38,
+        "wilting": 0.30,
+        "yellow_leaves_uniform": 0.22,
+        "curled_leaves": 0.15
+      },
+      "negative_signals": {
+        "dark_spots": -0.20,
+        "white_powder": -0.25,
+        "insects_visible": -0.18,
+        "webbing": -0.28,
+        "holes_in_leaves": -0.18,
+        "blossom_end_rot": -0.30,
+        "stem_darkening": -0.15
+      },
+      "environment_modifiers": {},
+      "weather_modifiers": {},
+      "explanation_factors": {
+        "slow_growth": "Растение плохо растёт при нескольких одновременных нарушениях",
+        "wilting": "Увядание без явной причины часто говорит о совокупности факторов"
+      },
+      "today_actions": [
+        "Проведите комплексную проверку: полив, подкормка, свет, температура",
+        "Убедитесь в правильном режиме полива",
+        "Проверьте нет ли скрытых вредителей под листьями"
+      ],
+      "what_to_check_next": [
+        "Загрузите фото ещё раз с разных ракурсов для более точной диагностики",
+        "Опишите симптомы подробнее в повторном запросе"
+      ],
+      "video_tone": "friendly_guide"
+    }
+  ]
+}

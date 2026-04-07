@@ -1,0 +1,44 @@
+{
+  "crop": "tomato",
+  "name_ru": "Томат",
+  "applicable_issues": [
+    "overwatering", "underwatering", "root_rot",
+    "nitrogen_deficiency", "potassium_deficiency", "magnesium_deficiency",
+    "cold_stress", "transplant_stress",
+    "powdery_mildew", "phytophthora", "alternaria",
+    "aphids", "spider_mites",
+    "greenhouse_humidity", "blossom_end_rot"
+  ],
+  "issue_overrides": {
+    "phytophthora": {
+      "urgency_base": "critical",
+      "weight_multiplier": 1.25,
+      "note": "Томат — основная культура-хозяин P. infestans"
+    },
+    "blossom_end_rot": {
+      "weight_multiplier": 1.15
+    },
+    "alternaria": {
+      "weight_multiplier": 1.10
+    },
+    "root_rot": {
+      "weight_multiplier": 1.10
+    }
+  },
+  "stage_modifiers": {
+    "fruiting": {
+      "phytophthora": 1.20,
+      "blossom_end_rot": 1.30,
+      "potassium_deficiency": 1.15
+    },
+    "flowering": {
+      "cold_stress": 1.20,
+      "blossom_end_rot": 1.10
+    },
+    "seedling": {
+      "transplant_stress": 1.30,
+      "cold_stress": 1.20,
+      "root_rot": 1.10
+    }
+  }
+}

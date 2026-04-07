@@ -1,0 +1,42 @@
+{
+  "crop": "strawberry",
+  "name_ru": "Клубника",
+  "applicable_issues": [
+    "overwatering", "underwatering", "root_rot",
+    "nitrogen_deficiency", "potassium_deficiency", "magnesium_deficiency",
+    "cold_stress",
+    "powdery_mildew", "alternaria",
+    "aphids", "spider_mites", "slug_damage",
+    "general_stress"
+  ],
+  "issue_overrides": {
+    "root_rot": {
+      "urgency_base": "critical",
+      "weight_multiplier": 1.28,
+      "note": "Корневая гниль (Phytophthora fragariae) быстро уничтожает клубнику"
+    },
+    "powdery_mildew": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.18,
+      "note": "Мучнистая роса снижает урожайность и портит ягоды"
+    },
+    "slug_damage": {
+      "weight_multiplier": 1.20,
+      "note": "Слизни особенно вредят созревающим ягодам"
+    },
+    "spider_mites": {
+      "weight_multiplier": 1.15
+    }
+  },
+  "stage_modifiers": {
+    "fruiting": {
+      "slug_damage": 1.30,
+      "potassium_deficiency": 1.20,
+      "root_rot": 1.15
+    },
+    "flowering": {
+      "cold_stress": 1.35,
+      "powdery_mildew": 1.12
+    }
+  }
+}

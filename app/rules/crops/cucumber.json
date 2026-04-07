@@ -1,0 +1,41 @@
+{
+  "crop": "cucumber",
+  "name_ru": "Огурец",
+  "applicable_issues": [
+    "overwatering", "underwatering", "root_rot",
+    "nitrogen_deficiency", "potassium_deficiency", "magnesium_deficiency",
+    "cold_stress", "transplant_stress",
+    "powdery_mildew", "alternaria",
+    "aphids", "spider_mites",
+    "greenhouse_humidity", "general_stress"
+  ],
+  "issue_overrides": {
+    "powdery_mildew": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.25,
+      "note": "Огурец очень susceptible — мучнистая роса распространяется быстро"
+    },
+    "root_rot": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.20
+    },
+    "cold_stress": {
+      "urgency_base": "high",
+      "weight_multiplier": 1.20,
+      "note": "Огурец погибает при +5°C"
+    }
+  },
+  "stage_modifiers": {
+    "fruiting": {
+      "potassium_deficiency": 1.20,
+      "powdery_mildew": 1.10
+    },
+    "seedling": {
+      "cold_stress": 1.40,
+      "transplant_stress": 1.30
+    },
+    "flowering": {
+      "cold_stress": 1.25
+    }
+  }
+}
