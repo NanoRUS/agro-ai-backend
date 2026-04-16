@@ -80,7 +80,11 @@ class SignalExtractor:
         signals.update(moisture_map.get(questionnaire.soil_moisture, {}))
 
         # Среда выращивания
-        signals["greenhouse" if questionnaire.growing_environment == "greenhouse" else "open_field"] = 1.0
+        env = questionnaire.growing_environment
+        if env in ("greenhouse", "indoor"):
+            signals["greenhouse"] = 1.0
+        else:
+            signals["open_field"] = 1.0
 
         # Булевые симптомы
         for field_name, signal_key in self._BOOL_SIGNALS.items():
