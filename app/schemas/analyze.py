@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field
 
 
 CropType = Literal["tomato", "cucumber", "potato", "pepper", "strawberry"]
+PlantCategory = Literal["houseplant", "flowering", "succulent", "decorative", "unknown"]
 GrowingEnv = Literal["greenhouse", "open_field", "indoor"]
 WateringFreq = Literal["daily", "every_2_days", "every_3_days", "weekly", "rarely"]
 SoilMoisture = Literal["very_wet", "wet", "normal", "dry", "very_dry"]
@@ -61,7 +62,8 @@ class QuestionnaireAnswers(BaseModel):
 
 
 class AnalyzeRequest(BaseModel):
-    crop_type: CropType
+    crop_type: Optional[CropType] = None
+    plant_category: Optional[PlantCategory] = None
     questionnaire: QuestionnaireAnswers
     user_context: Optional[UserContext] = None
     # images_base64: Optional[list[str]] = None  # alternative to multipart
@@ -84,7 +86,7 @@ class UrgencyResult(BaseModel):
 
 
 class CropResult(BaseModel):
-    selected: CropType
+    selected: str
     detected: Optional[str] = None
     confidence: Optional[float] = None
 

@@ -29,6 +29,9 @@ _weather = WeatherService()
 CROP_NAMES_RU = {
     "tomato": "томате", "cucumber": "огурце",
     "potato": "картофеле", "pepper": "перце", "strawberry": "клубнике",
+    "houseplant": "комнатном растении", "flowering": "цветущем растении",
+    "succulent": "суккуленте", "decorative": "декоративном растении",
+    "unknown": "растении",
 }
 
 
@@ -60,8 +63,14 @@ async def analyze(
     for img in images[:5]:
         image_bytes_list.append(await img.read())
 
+    # --- Resolve crop context ---
+    # farm: crop_type set, plant_category=None
+    # home/dacha: crop_type=None, plant_category set → generic issue set
+    effective_crop = request.crop_type or "generic"
+    display_selected = request.crop_type or request.plant_category or "unknown"
+
     # --- CV analysis (stub) ---
-    cv_output = await _cv.analyze_images(image_bytes_list, crop_hint=request.crop_type)
+    cv_output = await _cv.analyze_images(image_bytes_list, crop_hint=request.crop_type or request.plant_category)
 
     # --- Weather enrichment ---
     ctx = request.user_context
@@ -78,7 +87,7 @@ async def analyze(
 
     # --- Scoring ---
     scored_issues, signals = _scoring.analyze(
-        crop=request.crop_type,
+        crop=effective_crop,
         plant_stage=request.questionnaire.plant_stage,
         questionnaire=request.questionnaire,
         user_context=ctx,
@@ -97,7 +106,7 @@ async def analyze(
     # --- Persist ---
     analysis = Analysis(
         id=analysis_id,
-        crop_selected=request.crop_type,
+        crop_selected=display_selected,
         growth_stage=request.questionnaire.plant_stage,
         urgency_level=urgency_level,
         urgency_reason=urgency_reason,
@@ -136,7 +145,7 @@ async def analyze(
     return AnalyzeResponse(
         analysis_id=analysis_id,
         crop=CropResult(
-            selected=request.crop_type,
+            selected=display_selected,
             detected=cv_output.get("detected_crop"),
             confidence=cv_output.get("crop_confidence"),
         ),

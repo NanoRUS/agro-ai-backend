@@ -1,0 +1,14 @@
+{
+  "crop": "generic",
+  "name_ru": "растение",
+  "applicable_issues": [
+    "overwatering",
+    "underwatering",
+    "root_rot",
+    "aphids",
+    "spider_mites",
+    "general_stress"
+  ],
+  "issue_overrides": {},
+  "stage_modifiers": {}
+}
