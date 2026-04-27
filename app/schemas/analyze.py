@@ -4,7 +4,11 @@ from pydantic import BaseModel, Field
 
 
 CropType = Literal["tomato", "cucumber", "potato", "pepper", "strawberry"]
-PlantCategory = Literal["houseplant", "flowering", "succulent", "decorative", "unknown"]
+PlantCategory = Literal[
+    "houseplant", "flowering", "succulent", "decorative",
+    "vegetable", "berry", "shrub", "tree",
+    "unknown",
+]
 GrowingEnv = Literal["greenhouse", "open_field", "indoor"]
 WateringFreq = Literal["daily", "every_2_days", "every_3_days", "weekly", "rarely"]
 SoilMoisture = Literal["very_wet", "wet", "normal", "dry", "very_dry"]
