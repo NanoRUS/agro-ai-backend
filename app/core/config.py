@@ -33,8 +33,12 @@ class Settings(BaseSettings):
     s3_access_key: str = ""
     s3_secret_key: str = ""
 
-    # CORS (production — comma-separated origins)
-    allowed_origins: str = "http://localhost:3000"
+    # CORS (comma-separated origins; extend via env var ALLOWED_ORIGINS)
+    allowed_origins: str = (
+        "http://localhost:3000,"
+        "http://127.0.0.1:3000,"
+        "https://agro-ai-frontend-kohl.vercel.app"
+    )
 
     # Scoring
     top_issues_count: int = 3
