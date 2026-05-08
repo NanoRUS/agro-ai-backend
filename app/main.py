@@ -16,6 +16,7 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     _validate_settings(settings)
     await create_tables()
+    print("CORS_ORIGINS:", settings.allowed_origins)
     logger.info("agro-ai backend started | debug=%s | db=%s",
                 settings.debug, settings.database_url.split("///")[-1])
     yield
