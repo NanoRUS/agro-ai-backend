@@ -15,7 +15,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 VISION_MODEL = "gemma3:27b"
-TIMEOUT = 120.0
+TIMEOUT = 60.0
 
 _PROMPT = """\
 You are a plant detector for a photo validation gate.
@@ -189,6 +189,7 @@ async def validate_photo(image: Annotated[UploadFile, File()]) -> dict:
                     ],
                     "stream": False,
                     "format": "json",
+                    "keep_alive": "10m",
                 },
             )
             resp.raise_for_status()
