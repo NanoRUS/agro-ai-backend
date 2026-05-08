@@ -160,11 +160,23 @@ def _apply_thresholds(raw: dict) -> str:
     return status
 
 
+VALIDATION_VERSION = "plant-gate-v3-simple-isPlant"
+
+
 @router.post("/validate-photo")
 async def validate_photo(image: Annotated[UploadFile, File()]) -> dict:
     """Validate whether the uploaded image is a suitable plant photo for diagnosis."""
     settings = get_settings()
-    image_b64 = base64.b64encode(await image.read()).decode()
+    image_bytes = await image.read()
+    image_b64 = base64.b64encode(image_bytes).decode()
+
+    logger.info(
+        "validate_photo [%s]: file=%r content_type=%r size=%d bytes",
+        VALIDATION_VERSION,
+        image.filename,
+        image.content_type,
+        len(image_bytes),
+    )
 
     try:
         async with httpx.AsyncClient(timeout=TIMEOUT) as client:
@@ -188,6 +200,8 @@ async def validate_photo(image: Annotated[UploadFile, File()]) -> dict:
         logger.error("validate_photo: Ollama error: %s", e)
         return _fallback()
 
+    logger.info("validate_photo: raw_ollama_response=%.500s", raw_content)
+
     try:
         model_data = json.loads(raw_content)
     except json.JSONDecodeError:
@@ -196,11 +210,13 @@ async def validate_photo(image: Annotated[UploadFile, File()]) -> dict:
 
     status = _apply_thresholds(model_data)
     logger.info(
-        "validate_photo: model=%s conf=%.2f mainSubject=%r → status=%s",
+        "validate_photo: isPlant=%s model_status=%s conf=%.2f mainSubject=%r → final_status=%s reason=%r",
+        model_data.get("isPlant"),
         model_data.get("status"),
         model_data.get("confidence", 0),
         model_data.get("mainSubject", ""),
         status,
+        model_data.get("reason", ""),
     )
 
     return {
@@ -208,6 +224,7 @@ async def validate_photo(image: Annotated[UploadFile, File()]) -> dict:
         "confidence": model_data.get("confidence"),
         "reason": model_data.get("reason", ""),
         "userMessage": _USER_MESSAGES[status],
+        "validationVersion": VALIDATION_VERSION,
         "debug": {
             "mainSubject": model_data.get("mainSubject"),
             "isPlant": model_data.get("isPlant"),
