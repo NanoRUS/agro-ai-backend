@@ -15,7 +15,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 VISION_MODEL = "gemma3:27b"
-TIMEOUT = 60.0
+TIMEOUT = 120.0
 
 _PROMPT = """\
 You are a plant detector for a photo validation gate.
