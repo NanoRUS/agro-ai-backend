@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     secret_key: str = "dev-secret-key"
     debug: bool = True
 
+    # Ollama (local vision model — photo validation gate)
+    ollama_url: str = "http://192.168.10.40:11434"
+
     # External CV service
     plant_id_api_key: str = ""
 
