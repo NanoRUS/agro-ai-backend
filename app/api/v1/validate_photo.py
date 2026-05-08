@@ -18,54 +18,36 @@ VISION_MODEL = "gemma3:27b"
 TIMEOUT = 60.0
 
 _PROMPT = """\
-You are a photo validation gate for a plant diagnosis app.
+You are a plant detector for a photo validation gate.
 
-YOUR ONLY GOAL: decide if this photo is good enough to START a plant diagnosis.
-You are NOT diagnosing disease. You are NOT checking if disease is visible.
-A healthy-looking plant photo is perfectly valid — the diagnosis will happen later.
+YOUR ONLY TASK: determine whether a plant is visible in the image.
+Do NOT judge photo quality. Do NOT check for disease. Do NOT assess focus or distance.
 
-STEP 1 — IDENTIFY THE MAIN SUBJECT:
-What is the PRIMARY, DOMINANT object in this image?
-Write it concisely in "mainSubject" (e.g. "frying pan", "tomato leaf", "empty flower pot", "blurry houseplant in corner").
+DECISION LOGIC:
 
-STEP 2 — APPLY RULES IN ORDER:
+Return "valid" if ANY living plant is visible in the image:
+  - any leaf, stem, flower, fruit, seedling, sprout, or branch
+  - plant in a pot, in soil, on a table, anywhere
+  - small seedlings in cups or trays
+  - distant plants or garden scenes
+  - partially visible plants
+  - healthy plants with no visible disease
+  Even if the plant is small, in the background, or not the main focus → "valid"
 
-RULE 1 — NOT A PLANT → return "not_plant":
-If the main subject is NOT a living plant or part of a living plant, return "not_plant".
-This includes:
-  - Cookware: frying pan, saucepan, cooking pot, skillet, wok, kettle
-  - Tableware: plate, bowl, cup, mug, dish, glass, cutlery
-  - Furniture: chair, table, sofa, desk, shelf, cabinet
-  - Electronics: phone, computer, screen, appliance, keyboard
-  - Other objects: document, paper, book, tool, container, bucket, jar, vehicle, building
-  - People, animals, insects on non-plant surfaces
-  - Cooked or cut food, vegetables/fruit on a plate or table
-  CRITICAL: An empty pot or planter with NO visible plant → "not_plant"
-  CRITICAL: Bare soil or dirt with NO visible plant → "not_plant"
-  CRITICAL: Cooked or cut food on any surface → "not_plant"
+Return "not_plant" if there is clearly NO plant in the image:
+  - cookware, tableware, kitchen items (pan, pot, plate, cup, bowl)
+  - furniture, electronics, appliances, documents, tools
+  - people, animals
+  - cooked or cut food on a plate
+  - empty pot or planter with no visible plant
+  - bare soil with no visible plant above it
+  - any non-plant object with no plant present
 
-RULE 2 — PLANT IS ONLY BACKGROUND → return "retake":
-A plant is visible but is small, far away, or clearly background decoration,
-and the main subject is something else → return "retake".
+Return "retake" ONLY if the image is so degraded that you genuinely cannot tell
+whether a plant is present (e.g. completely black image, total blur with no shapes).
 
-RULE 3 — VALID PLANT PHOTO → return "valid":
-Return "valid" when the main subject IS a plant or plant part AND the photo is usable:
-  ✓ A leaf, stem, flower, fruit, branch, or root is clearly visible
-  ✓ The plant fills a reasonable portion of the frame
-  ✓ The image is focused enough to see the plant
-  ✓ Lighting is acceptable (not pitch black or completely blown out)
-Do NOT require visible disease or damage. A green healthy leaf is a valid photo.
-Do NOT reject a photo just because the plant looks healthy.
-
-RULE 4 — POOR QUALITY → return "retake":
-Return "retake" only for genuine quality problems:
-  - Plant is so far away it is barely recognisable
-  - Severely out of focus (cannot make out plant details at all)
-  - Extremely dark or overexposed (plant is not visible)
-  - Plant occupies only a tiny corner and is clearly not the subject
-
-Set isDiagnosable = true whenever a plant is clearly visible as the main subject,
-regardless of whether disease symptoms are present.
+Set isPlant = true whenever any plant is visible anywhere in the image.
+Set isDiagnosable = true whenever isPlant = true.
 
 Return ONLY valid JSON with this exact shape:
 {
@@ -153,26 +135,23 @@ def _apply_thresholds(raw: dict) -> str:
     is_diagnosable = raw.get("isDiagnosable")
     main_subject  = (raw.get("mainSubject") or "").strip()
 
-    # Missing or empty mainSubject → model uncertainty → retake
+    # isPlant explicitly true → always valid regardless of other fields
+    if is_plant is True:
+        return "valid"
+
+    # isPlant explicitly false → not_plant (unless model is very uncertain)
+    if is_plant is False:
+        if confidence >= 0.5:
+            return "not_plant"
+        return "retake"
+
+    # isPlant not set — fall back to model status with safety checks
     if not main_subject:
         return "retake"
 
-    # isPlant explicitly false → not_plant regardless of status
-    if is_plant is False:
-        return "not_plant"
-
-    # mainSubject reveals a non-plant object → override to not_plant
+    # mainSubject clearly a non-plant object → not_plant
     if _is_non_plant_subject(main_subject):
         return "not_plant"
-
-    # valid: lowered confidence threshold; isDiagnosable no longer required
-    # (gate checks photo quality/relevance, not presence of disease symptoms)
-    if status == "valid" and confidence < 0.65:
-        return "retake"
-
-    # not_plant with very low confidence → model unsure → retake
-    if status == "not_plant" and confidence < 0.6:
-        return "retake"
 
     # Unknown status value → retake
     if status not in ("valid", "retake", "not_plant"):
